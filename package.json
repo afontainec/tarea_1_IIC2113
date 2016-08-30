@@ -1,0 +1,15 @@
+{
+    "name": "saffie",
+    "version": "1.0.0",
+    "description": "CLI",
+    "main": "index.js",
+    "scripts": {},
+    "bin": {
+        "saffie": "./index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "commander": "^2.9.0"
+    }
+}
