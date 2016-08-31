@@ -20,6 +20,7 @@ program
     .description('get all the repositories of a particular organization')
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-i, --info [info]', 'show full info or not')
+    .option('-c, --commit [commit]', 'show last commit or not')
     .action((options) => {
       organizationController.allRepositories(options);
     });
