@@ -1,3 +1,4 @@
+
 const requestify = require('requestify');
 
 
@@ -6,12 +7,12 @@ const requestify = require('requestify');
 // };
 
 
-exports.allRepositories = function (options) {
+exports.allRepositories = function getAllRepositories(options) {
   const URL = 'https://api.github.com/orgs/' + options.organization + '/repos';
   console.log('******* Searching in github... *******************************************');
   console.log('**************************************************************************');
   console.log('Repositories of organization: ' + options.organization);
-  requestify.get(URL).then(function (response) {
+  Requestify.get(URL).then(function (response) {
         // Get the response body
     const body = response.getBody();
     for (let i = 0; i < body.length; i++) {

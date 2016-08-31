@@ -19,7 +19,7 @@ program
     .alias('repos')
     .description('get repositories')
     .option('-o, --organization [organization]', 'organization to which get repositories')
-    .action(function login(options) {
+    .action((options) => {
       organizationController.allRepositories(options);
     });
 
@@ -31,7 +31,7 @@ program
     .description('get repositories')
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-r, --repository [repository]', 'repository to check if it exists in organization')
-    .action(function login(options) {
+    .action((options) => {
       organizationController.findRepository(options);
     });
 
@@ -41,7 +41,7 @@ program
     .description('generate login')
     .option('-u, --username [username]', 'username for the login')
     .option('-p, --password [password]', 'password for the login')
-    .action(function login(env, options) {
+    .action((env, options) => {
       sessionController.login(env, options);
     });
 
@@ -49,12 +49,12 @@ program
     .command('logout [env] ')
     // .alias('logout [env]')
     .description('logout from github or bitbucket ')
-    .action(function (env) {
+    .action((env) => {
       console.log('logging out from %s', env);
     });
 
 program
-    .on('--help', function () {
+    .on('--help', () => {
       console.log('  Examples:');
       console.log();
       console.log('    $ saffie login github -u user -p pass');
@@ -64,7 +64,7 @@ program
 
 program
     .command('*')
-    .action(function (env) {
+    .action((env) => {
       console.log('Command does not exists "%s"', env);
     });
 
