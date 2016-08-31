@@ -6,10 +6,10 @@ const sessionController = require('./controllers/sessionController');
 const organizationController = require('./controllers/organizationController');
 
 program
-    .version('0.0.1')
-    .option('-C, --chdir <path>', 'change the working directory')
-    .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')
-    .option('-T, --no-tests', 'ignore test hook');
+    .version('0.0.1');
+    // .option('-C, --chdir <path>', 'change the working directory')
+    // .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')
+    // .option('-T, --no-tests', 'ignore test hook');
 
 
 // / RF2
@@ -17,8 +17,9 @@ program
 program
     .command('repositories')
     .alias('repos')
-    .description('get repositories')
+    .description('get all the repositories of a particular organization')
     .option('-o, --organization [organization]', 'organization to which get repositories')
+    .option('-i, --info [info]', 'show full info or not')
     .action((options) => {
       organizationController.allRepositories(options);
     });
@@ -28,7 +29,7 @@ program
 program
     .command('has-repository')
     .alias('has-repo')
-    .description('get repositories')
+    .description('indicates if an organization has the repo')
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-r, --repository [repository]', 'repository to check if it exists in organization')
     .action((options) => {

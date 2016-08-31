@@ -12,11 +12,11 @@ exports.allRepositories = function getAllRepositories(options) {
   console.log('******* Searching in github... *******************************************');
   console.log('**************************************************************************');
   console.log('Repositories of organization: ' + options.organization);
-  Requestify.get(URL).then(function (response) {
+  requestify.get(URL).then(function (response) {
         // Get the response body
     const body = response.getBody();
     for (let i = 0; i < body.length; i++) {
-      resumeRepository(body[i], (i + 1));
+      printRepository(body[i], (i + 1), options.info);
     }
     if (body.length == 0) {
       console.log('  ...');
@@ -43,7 +43,7 @@ exports.findRepository = function (options) {
     for (let i = 0; i < body.length; i++) {
       if (body[i].name == options.repository) {
         console.log('Organization ' + options.organization + ' has repository: ');
-        resumeRepository(body[i], '');
+        printRepository(body[i], '', false);
         exists = true;
       }
     }
@@ -60,17 +60,19 @@ exports.findRepository = function (options) {
 };
 
 
-function resumeRepository(repository, j) {
+function printRepository(repository, j, extended) {
   console.log('----------------------------------------------------------------------------------------------------------------');
   console.log('  ' + (j) + '- Name: ' + repository.name);
   if (repository.private)
     console.console.log('    This is a private repository');
   console.log('    This is a public repository');
   console.log('    Description: ' + repository.description);
-  console.log('    Created: ' + repository.created_at);
-  console.log('    Clone URL: ' + repository.clone_url);
-  console.log('    Number of stargazers: ' + repository.stargazers_count);
-  console.log('    Number of watchers: ' + repository.watchers_count);
-  console.log('    Number of open issues: ' + repository.open_issues_count);
-  console.log('    Number of forks: ' + repository.forks_count);
+  if (extended) {
+    console.log('    Created: ' + repository.created_at);
+    console.log('    Clone URL: ' + repository.clone_url);
+    console.log('    Number of stargazers: ' + repository.stargazers_count);
+    console.log('    Number of watchers: ' + repository.watchers_count);
+    console.log('    Number of open issues: ' + repository.open_issues_count);
+    console.log('    Number of forks: ' + repository.forks_count);
+  }
 }
