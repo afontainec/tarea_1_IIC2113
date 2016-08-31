@@ -23,6 +23,18 @@ program
       organizationController.allRepositories(options);
     });
 
+// RF3
+
+program
+    .command('has-repository')
+    .alias('has-repo')
+    .description('get repositories')
+    .option('-o, --organization [organization]', 'organization to which get repositories')
+    .option('-r, --repository [repository]', 'repository to check if it exists in organization')
+    .action(function login(options) {
+      organizationController.findRepository(options);
+    });
+
 
 program
     .command('login [env]')
