@@ -10,7 +10,6 @@ exports.getUrl = function(attribute, provider, options) {
 }
 
 
-
 function replacements(str, options) {
     var replacements = {
         "%organization%": options.organization,
