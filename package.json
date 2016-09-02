@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {},
   "bin": {
-    "saffie": "./user_interface/lector.js"
+    "saffie": "./Layer 0: user_interface/lector.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "commander": "^2.9.0",
-    "requestify": "^0.2.3"
+    "requestify": "^0.2.3",
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "eslint": "^3.4.0",

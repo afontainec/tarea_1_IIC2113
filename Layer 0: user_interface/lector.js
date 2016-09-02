@@ -2,7 +2,7 @@
 
 const program = require('commander');
 
-const organizationController = require('../controllers/organizationController');
+const interpreter = require('../Layer 1: Business Logic/interpreter');
 
 program
     .version('0.0.1');
@@ -18,7 +18,7 @@ program
     .option('-i, --info [info]', 'show full info or not')
     .option('-c, --commit [commit]', 'show last commit or not')
     .action(function (env, options) {
-      organizationController.allRepositories(options);
+      interpreter.allRepositories(env, options);
     });
 
 // RF3
@@ -30,7 +30,7 @@ program
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-r, --repository [repository]', 'repository to check if it exists in organization')
     .action((options) => {
-      organizationController.findRepository(options);
+      interpreter.findRepository(options);
     });
 
 

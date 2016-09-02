@@ -1,17 +1,16 @@
-exports.provider_map = {
+exports.map = {
     github: {
       host: "https://api.github.com",
       //rf2 and rf4
-      all_repositories{
-        path_before: "/orgs/",
-        path_after: "/repos",
-        path: "/orgs/:organization/repos"
+      all_repositories: {
+        path: "/orgs/%organization%/repos",
+        value: false,
         params: ["name", "description", "private"],
         //for rf4
-        extended_params: ['created_at', 'clone_url', 'stargazers_count',
+        extended_params: ['clone_url', 'stargazers_count',
                           'watchers_count', 'open_issues_count', 'forks_count'],
       },
-    commits{
+    commits: {
       path_before: "/repos/",
       path_after: "/commits",
       params: [],
@@ -22,12 +21,12 @@ exports.provider_map = {
     },
 
     bitbucket: {
-      host: '',
+      host: 'https://api.bitbucket.org',
       all_repositories: {
-        path_before: '',
-        path_after: '',
+        path: "/2.0/repositories/%organization%",
+        value: "values",
         // path: '/orgs/{ORG}/repos',
-        params: ['', '', ''],
+        params: ['name', '', 'is_private'],
         extended_params: ['', '', '',
                           '', '', ''],
       },

@@ -97,7 +97,7 @@ function printRepositorySummary(repository, j, extended) {
   console.log('----------------------------------------------------------------------------------------------------------------');
   console.log('  ' + (counter) + '- Name: ' + repository.name);
   if (repository.private)
-    console.console.log('    This is a private repository');
+    console.log('    This is a private repository');
   console.log('    This is a public repository');
   console.log('    Description: ' + repository.description);
   if (extended) {
