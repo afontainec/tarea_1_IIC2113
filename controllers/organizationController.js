@@ -1,14 +1,13 @@
 const requestify = require('requestify');
+const provider = require('../provider');
 
 
-// const providers = {
-//  github: { host: 'https://api.github.com' }
-// };
 
 let counter = 0;
 
 
 exports.allRepositories = function getAllRepositories(options) {
+  provider.allRepositoriesURL('github', options.organization);
   const URL = 'https://api.github.com/orgs/' + options.organization + '/repos';
   console.log('******* Searching in github... *******************************************');
   console.log('**************************************************************************');
@@ -66,7 +65,7 @@ function printRepository(repository, j, extended, showLastCommit) {
     const URL = repository.commits_url.substring(0, repository.commits_url.length - 6);
 
     requestify.get(URL).then(function (response) {
-            // Get the response body
+      // Get the response body
       const body = response.getBody();
 
       printRepositorySummary(repository, j, extended);

@@ -7,28 +7,26 @@ const organizationController = require('./controllers/organizationController');
 
 program
     .version('0.0.1');
-    // .option('-C, --chdir <path>', 'change the working directory')
-    // .option('-c, --config <path>', 'set config path. defaults to ./deploy.conf')
-    // .option('-T, --no-tests', 'ignore test hook');
 
 
 // / RF2
 
 program
-    .command('repositories')
+    .command('repositories [env]')
     .alias('repos')
     .description('get all the repositories of a particular organization')
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-i, --info [info]', 'show full info or not')
     .option('-c, --commit [commit]', 'show last commit or not')
-    .action((options) => {
+    .action(function (env, options) {
+      console.log(env);
       organizationController.allRepositories(options);
     });
 
 // RF3
 
 program
-    .command('has-repository')
+    .command('has-repository [env]')
     .alias('has-repo')
     .description('indicates if an organization has the repo')
     .option('-o, --organization [organization]', 'organization to which get repositories')
