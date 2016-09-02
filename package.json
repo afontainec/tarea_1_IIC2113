@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {},
   "bin": {
-    "saffie": "./index.js"
+    "saffie": "./user_interface/lector.js"
   },
   "author": "",
   "license": "ISC",

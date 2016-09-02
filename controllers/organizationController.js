@@ -1,5 +1,5 @@
 const requestify = require('requestify');
-const provider = require('../provider');
+const provider = require('../models/provider');
 
 
 
@@ -7,7 +7,6 @@ let counter = 0;
 
 
 exports.allRepositories = function getAllRepositories(options) {
-  provider.allRepositoriesURL('github', options.organization);
   const URL = 'https://api.github.com/orgs/' + options.organization + '/repos';
   console.log('******* Searching in github... *******************************************');
   console.log('**************************************************************************');

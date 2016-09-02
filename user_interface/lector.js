@@ -2,8 +2,7 @@
 
 const program = require('commander');
 
-const sessionController = require('./controllers/sessionController');
-const organizationController = require('./controllers/organizationController');
+const organizationController = require('../controllers/organizationController');
 
 program
     .version('0.0.1');
@@ -36,22 +35,6 @@ program
     });
 
 
-program
-    .command('login [env]')
-    .description('generate login')
-    .option('-u, --username [username]', 'username for the login')
-    .option('-p, --password [password]', 'password for the login')
-    .action((env, options) => {
-      sessionController.login(env, options);
-    });
-
-program
-    .command('logout [env] ')
-    // .alias('logout [env]')
-    .description('logout from github or bitbucket ')
-    .action((env) => {
-      console.log('logging out from %s', env);
-    });
 
 program
     .on('--help', () => {
