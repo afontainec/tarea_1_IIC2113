@@ -1,9 +1,9 @@
-//Layer 1: Business Logic/interpreter.js
+//Layer 1 - Business Logic/interpreter.js
 
 const logic = require('./logic');
-const Provider = require('../Layer 2: Data-access/providerAccess');
+const Provider = require('../Layer 2 - Data Access/providerAccess');
 const Parser = require('./parser');
-const Printer = require('../Layer 0: user_interface/printer');
+const Printer = require('../Layer 0 - User Interface/printer');
 
 
 

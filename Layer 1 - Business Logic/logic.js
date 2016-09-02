@@ -1,9 +1,11 @@
-//Layer 1: Business Logic/logic
+//Layer 1 - Business Logic/logic
 
 const requestify = require('requestify');
 const q = require('q');
-const Provider = require('../Layer 2: Data-access/providerAccess');
+const Provider = require('../Layer 2 - Data Access/providerAccess');
 
+const username = 'meneh-tienda';
+const password = 'MenehHunter8';
 
 exports.getRepositories = getAllRepositories;
 
@@ -15,8 +17,8 @@ function getAllRepositories(provider, options, callback) {
     const URL = Provider.getUrl("all_repositories", provider, options);
     requestify.get(URL, {
         auth: {
-            username: 'afontainec',
-            password: ''
+            username: username,
+            password: password
         }
     }).then(function(response) {
         // Get the response body
@@ -47,8 +49,8 @@ exports.findRepository = function(provider, options, callback) {
     const URL = Provider.getUrl("all_repositories", provider, options);
     requestify.get(URL, {
         auth: {
-            username: 'afontainec',
-            password: ''
+            username: username,
+            password: password
         }
     }).then(function(response) {
         // Get the response body
@@ -122,8 +124,8 @@ function getLastCommitOfRepository(repository, provider, options, callback) {
     const URL = Provider.getUrl("commits", provider, options);
     requestify.get(URL, {
         auth: {
-            username: 'afontainec',
-            password: ''
+            username: username,
+            password: password
         }
     }).then(function(response) {
         // Get the response body

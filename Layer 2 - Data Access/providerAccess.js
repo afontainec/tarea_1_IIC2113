@@ -1,6 +1,6 @@
 //Layer:2 Data-access/providerAccess.js
 
-const Provider = require('../Layer 3: Data/providers');
+const Provider = require('../Layer 3 - Data/providers');
 
 
 exports.getUrl = function(attribute, provider, options) {

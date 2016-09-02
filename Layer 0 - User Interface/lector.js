@@ -2,7 +2,7 @@
 
 const program = require('commander');
 
-const interpreter = require('../Layer 1: Business Logic/interpreter');
+const interpreter = require('../Layer 1 - Business Logic/interpreter');
 
 program
     .version('0.0.1');
