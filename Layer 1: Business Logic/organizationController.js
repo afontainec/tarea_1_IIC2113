@@ -14,8 +14,8 @@ exports.allRepositories = function getAllRepositories(options) {
   requestify.get(URL).then(function (response) {
         // Get the response body
     const body = response.getBody();
+    counter = 0;
     for (let i = 0; i < body.length; i++) {
-      counter = 0;
       printRepository(body[i], (i + 1), options.info, options.commit);
     }
     if (body.length == 0) {

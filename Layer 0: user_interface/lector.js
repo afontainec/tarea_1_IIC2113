@@ -18,7 +18,6 @@ program
     .option('-i, --info [info]', 'show full info or not')
     .option('-c, --commit [commit]', 'show last commit or not')
     .action(function (env, options) {
-      console.log(env);
       organizationController.allRepositories(options);
     });
 
