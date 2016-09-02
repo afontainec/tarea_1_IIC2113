@@ -16,7 +16,7 @@ function getAllRepositories(provider, options, callback) {
     requestify.get(URL, {
         auth: {
             username: 'afontainec',
-            password: '18396187k'
+            password: ''
         }
     }).then(function(response) {
         // Get the response body
@@ -45,7 +45,12 @@ exports.findRepository = function(provider, options, callback) {
     var deferrer = q.defer();
 
     const URL = Provider.getUrl("all_repositories", provider, options);
-    requestify.get(URL).then(function(response) {
+    requestify.get(URL, {
+        auth: {
+            username: 'afontainec',
+            password: ''
+        }
+    }).then(function(response) {
         // Get the response body
         const value = Provider.getValue("all_repositories", provider, options);
         let repositories = [];
@@ -94,7 +99,7 @@ exports.getLastCommits = function(env, options, callback) {
                 results.push(last_commit);
                 finished += 1;
                 if (finished == length_of_array) {
-                  deferrer.resolve(results);
+                    deferrer.resolve(results);
                 }
             });
         }
@@ -118,7 +123,7 @@ function getLastCommitOfRepository(repository, provider, options, callback) {
     requestify.get(URL, {
         auth: {
             username: 'afontainec',
-            password: '18396187k'
+            password: ''
         }
     }).then(function(response) {
         // Get the response body
