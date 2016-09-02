@@ -30,3 +30,5 @@ function printRepository(repository, extended, showCommit) {
     }
     console.log("---------------------------------------------");
 }
+
+exports.printRepository = printRepository;

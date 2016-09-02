@@ -2,6 +2,8 @@
 
 
 
+
+
 function parseRepository(input_json, params, options) {
     let output_json = {
         name: input_json[params[0]],
@@ -26,6 +28,9 @@ function parseRepository(input_json, params, options) {
 
     return output_json;
 }
+
+
+exports.parseRepository = parseRepository;
 
 exports.parseRepositories = function(input_array, params, options) {
     let output_array = [];

@@ -29,8 +29,8 @@ program
     .description('indicates if an organization has the repo')
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-r, --repository [repository]', 'repository to check if it exists in organization')
-    .action((options) => {
-      interpreter.findRepository(options);
+    .action((env, options) => {
+      interpreter.findRepository(env, options);
     });
 
 
