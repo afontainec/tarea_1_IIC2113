@@ -101,6 +101,30 @@ function parseRepositoryWithIssues(input_json, params, issues_params, label_para
     return output_json;
 }
 
+exports.parseRepositoriesWithPulls = function(input_array, params, pulls_params, options) {
+    let output_array = [];
+
+    for (var i = 0; i < input_array.length; i++) {
+        output_array.push(parseRepositoryWithPulls(input_array[i], params, pulls_params, options));
+    }
+
+    return output_array;
+}
+
+function parseRepositoryWithPulls(input_json, params, pulls_params, options) {
+    options.info = false;
+    output_json = parseRepository(input_json, params, options);
+    output_json.pulls = [];
+    for (var i = 0; i < input_json.pulls.length ; i++){
+        pulls_to_add = parsePull(input_json.pulls[i], pulls_params, options);
+        if (pulls_to_add)
+            output_json.pulls.push(pulls_to_add);
+    }
+
+
+    return output_json;
+}
+
 function parseIssue(input_json, issues_params, label_params, options){
     title = getParam(input_json, issues_params[0]);
     date = getParam(input_json, issues_params[1]);
@@ -156,4 +180,35 @@ function parseLabel(input_json, label_params){
     };
 
     return label_json;
+}
+
+function parsePull(input_json, pulls_params, options){
+    title = getParam(input_json, pulls_params[0]);
+    date = getParam(input_json, pulls_params[1]);
+    user = getParam(input_json, pulls_params[2]);
+    state = getParam(input_json, pulls_params[3]);
+    basebranch = getParam(input_json, pulls_params[4]);
+    
+    if (options.author){
+        if(options.author != author)
+            return;
+    }
+    if (options.state){
+        if(options.state != state)
+            return;
+    }
+    if (options.basebranch){
+        if (options.basebranch != basebranch)
+            return;
+    }
+
+    pull_json = {
+        title: title,
+        date: date,
+        user: user,
+        state: state,
+        basebranch: basebranch
+    };
+
+    return pull_json;
 }

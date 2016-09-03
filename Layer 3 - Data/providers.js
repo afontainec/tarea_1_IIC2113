@@ -19,10 +19,15 @@ exports.map = {
         issues: {
             path: "/repos/%organization%/%repository%/issues?state=all",
             value: false,
-            params:['title', 'created_at' ,'user&login', 'state', 'labels']
+            params:['title', 'created_at', 'user&login', 'state', 'labels']
         },
         labels: {
             params:['name', 'color']
+        },
+        pulls: {
+            path: "/repos/%organization%/%repository%/pulls?state=all",
+            value: false,
+            params:['title', 'created_at', 'user&login', 'state', 'base&repo&default_branch']
         }
     },
 

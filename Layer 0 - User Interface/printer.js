@@ -54,7 +54,7 @@ function printIssues(repository) {
 
 function printIssue(issue){
     console.log("  Title: "+issue.title);
-    console.log("  Create Date: "+issue.date);
+    console.log("  Created Date: "+issue.date);
     console.log("  Author: "+issue.author);
     console.log("  State: "+issue.state);
     console.log("  Labels: ");
@@ -71,6 +71,27 @@ function printIssue(issue){
 function printLabel(label){
     console.log("    Name: "+label.name);
     console.log("    Color: "+label.color);
+}
+
+function printPulls(repository) {
+    console.log("Pull Requests:");
+    if (repository.pulls.length == 0){
+        console.log(" No pull requests in this repository");
+    } else {
+        for (var i = 0 ; i < repository.pulls.length; i++){
+            console.log(" Pull Request "+i);
+            printPull(repository.pulls[i]);
+        }
+    }
+
+}
+
+function printPull(pull){
+    console.log("  Title: "+pull.title);
+    console.log("  Created Date: "+pull.date);
+    console.log("  User: "+pull.user);
+    console.log("  State: "+pull.state);
+    console.log("  Base Branch: "+pull.basebranch);
 }
 
 exports.printOneRepository = function(repository, env, options) {
@@ -129,6 +150,30 @@ exports.printRepositoriesWithIssues = function(repositories, env, options) {
         console.log("---------------------------------------------");
         printRepository(repositories[i], false);
         printIssues(repositories[i]);
+        console.log("---------------------------------------------");
+    }
+    console.log("**************************************************************************");
+}
+
+exports.printRepositoriesWithPulls = function(repositories, env, options) {
+    console.log("**************************************************************************");
+    console.log("Repositories with the pulls of organization " + options.organization + " in provider " + env);
+    if (options.repository){
+        console.log(" In repository "+options.repository);
+    }
+    if (options.author){
+        console.log(" By "+options.author);
+    }
+    if (options.state){
+        console.log(" With state "+options.state);
+    }
+    if (options.basebranch){
+        console.log(" In base branch "+options.basebranch);
+    }
+    for (var i = 0; i < repositories.length; i++) {
+        console.log("---------------------------------------------");
+        printRepository(repositories[i], false);
+        printPulls(repositories[i]);
         console.log("---------------------------------------------");
     }
     console.log("**************************************************************************");

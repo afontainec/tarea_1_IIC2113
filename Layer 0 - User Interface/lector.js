@@ -45,7 +45,6 @@ program
 //RF 6
 program
     .command('issues [env]')
-    .alias('iss')
     .description('obtain and filter the issues of an organization')
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-r, --repository [repository]', 'filter by this repository')
@@ -55,6 +54,19 @@ program
     .option('-l, --label [label]' , 'label of the issue')
     .action(function(env, options) {
         interpreter.issues(env, options);
+    });
+
+//RF 7
+program
+    .command('pull-requests [env]')
+    .alias('pulls')
+    .description('obtain and filter the pull requests of an organization')
+    .option('-o, --organization [organization]', 'organization to which get repositories')
+    .option('-r, --repository [repository]', 'filter by this repository')
+    .option('-s, --state [state]' , 'state of the pull request')
+    .option('-b, --basebranch [basebranch]' , 'base branch of the pull request')
+    .action(function(env, options) {
+        interpreter.pulls(env, options);
     });
 
 

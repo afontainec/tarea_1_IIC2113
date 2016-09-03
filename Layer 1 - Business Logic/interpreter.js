@@ -92,3 +92,28 @@ exports.issues = function(env, options) {
 
     });
 }
+
+exports.pulls = function(env, options) {
+
+    logic.getPulls(env, options, function(err, response) {
+        if (err) {
+            console.log(Printer.Error(err));
+            return err;
+        }
+
+        if (options.repository && !response){
+            Printer.NoRepository(env, options);
+            return;
+        }
+
+        const params = Provider.getParams("all_repositories", env, false);
+        const pulls_params = Provider.getParams("pulls", env, false);
+
+        const parsed_response = Parser.parseRepositoriesWithPulls(response, params, pulls_params, options);
+
+        Printer.printRepositoriesWithPulls(parsed_response, env, options);
+
+
+
+    });
+}

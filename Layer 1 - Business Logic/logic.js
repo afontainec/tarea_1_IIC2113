@@ -240,3 +240,92 @@ function getIssuesOfRepository(repository, provider, options, callback) {
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
 }
+
+exports.getPulls = function(env, options, callback) {
+
+    var deferrer = q.defer();
+
+    if (options.repository){
+        // get pulls from the selected repository if it exists
+        findOneRepository(env, options, function(err, repository){
+            if (err) {
+                deferrer.reject(err);
+            }
+            if (!repository) {
+                deferrer.resolve(false);
+            }
+            let results = [];
+            getPullsOfRepository(repository, env, options, function(err, pulls) {
+                if (err) {
+                    deferrer.reject(err);
+                }
+                results.push(pulls);
+                deferrer.resolve(results);
+            });
+        });
+        deferrer.promise.nodeify(callback);
+        return deferrer.promise;
+    } else{
+        // get pulls from all repositories
+        getAllRepositories(env, options, function(err, repositories) {
+
+            if (err) {
+                deferrer.reject(err);
+            }
+            let finished = 0;
+            let results = [];
+            const length_of_array = repositories.length;
+            for (var i = 0; i < repositories.length; i++) {
+                getPullsOfRepository(repositories[i], env, options, function(err, pulls) {
+                    if (err) {
+                        deferrer.reject(err);
+                    }
+                    results.push(pulls);
+                    finished += 1;
+                    if (finished == length_of_array) {
+                        deferrer.resolve(results);
+                    }
+                });
+            }
+
+        });
+        deferrer.promise.nodeify(callback);
+        return deferrer.promise;
+    }
+
+}
+
+function getPullsOfRepository(repository, provider, options, callback) {
+
+    var deferrer = q.defer();
+
+    const URL = Provider.getUrl("pulls", provider, options.organization, repository.name);
+    requestify.get(URL, {
+        auth: {
+            username: username,
+            password: password
+        }
+    }).then(function(response) {
+        // Get the response body
+        const value = Provider.getValue("pulls", provider, options);
+        let repository_with_pulls = repository;
+
+        let pulls = [];
+        if (value)
+            pulls = response.getBody()[value];
+        else
+            pulls = response.getBody();
+        repository_with_pulls.number_of_pulls = pulls.length;
+        repository_with_pulls.pulls = pulls;
+        deferrer.resolve(repository_with_pulls);
+    }).fail(function(response) {
+        error = {
+            status: response.getHeaders().status,
+            message: response.getBody().message
+        }
+        deferrer.reject(error);
+    });
+
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+}
