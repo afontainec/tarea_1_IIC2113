@@ -42,6 +42,15 @@ program
         interpreter.lastCommits(env, options);
     });
 
+//RF 6
+program
+    .command('issues [env]')
+    .alias('iss')
+    .description('obtain and filter the issues of an organization')
+    .option('-o, --organization [organization]', 'organization to which get repositories')
+    .action(function(env, options) {
+        interpreter.issues(env, options);
+    });
 
 
 program

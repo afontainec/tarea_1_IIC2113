@@ -39,6 +39,26 @@ function printCommit(repository) {
 
 }
 
+function printIssues(repository) {
+    console.log("Issues:");
+    if (repository.issues.length == 0){
+        console.log(" No issues in this repository");
+    } else {
+        for (var i = 0 ; i < repository.issues.length; i++){
+            console.log(" Issue "+i);
+            printIssue(repository.issues[i]);
+        }
+    }
+
+}
+
+function printIssue(issue){
+    console.log("  Title: "+issue.title);
+    console.log("  Create Date: "+issue.date);
+    console.log("  Username: "+issue.username);
+    console.log("  State: "+issue.state);
+}
+
 exports.printOneRepository = function(repository, env, options) {
     console.log("**************************************************************************");
     console.log("Repository " + options.repository + " exists in organization " + options.organization + " in provider " + env);
@@ -68,6 +88,18 @@ exports.printRepositoriesWithCommit = function(repositories, env, options) {
         console.log("---------------------------------------------");
         printRepository(repositories[i], false);
         printCommit(repositories[i]);
+        console.log("---------------------------------------------");
+    }
+    console.log("**************************************************************************");
+}
+
+exports.printRepositoriesWithIssues = function(repositories, env, options) {
+    console.log("**************************************************************************");
+    console.log("Repositories with the issues of organization " + options.organization + " in provider " + env);
+    for (var i = 0; i < repositories.length; i++) {
+        console.log("---------------------------------------------");
+        printRepository(repositories[i], false);
+        printIssues(repositories[i]);
         console.log("---------------------------------------------");
     }
     console.log("**************************************************************************");

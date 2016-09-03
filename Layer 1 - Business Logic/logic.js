@@ -150,3 +150,69 @@ function getLastCommitOfRepository(repository, provider, options, callback) {
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
 }
+
+exports.getIssues = function(env, options, callback) {
+
+    var deferrer = q.defer();
+
+    getAllRepositories(env, options, function(err, repositories) {
+
+        if (err) {
+            deferrer.reject(err);
+        }
+        let finished = 0;
+        let results = [];
+        const length_of_array = repositories.length;
+        for (var i = 0; i < repositories.length; i++) {
+            getIssuesOfRepository(repositories[i], env, options, function(err, issues) {
+                if (err) {
+                    deferrer.reject(err);
+                }
+                results.push(issues);
+                finished += 1;
+                if (finished == length_of_array) {
+                    deferrer.resolve(results);
+                }
+            });
+        }
+
+    });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+}
+
+function getIssuesOfRepository(repository, provider, options, callback) {
+
+    var deferrer = q.defer();
+
+    options.repository = repository.name;
+    const URL = Provider.getUrl("issues", provider, options);
+    requestify.get(URL, {
+        auth: {
+            username: username,
+            password: password
+        }
+    }).then(function(response) {
+        // Get the response body
+        const value = Provider.getValue("issues", provider, options);
+        let repository_with_issues = repository;
+
+        let issues = [];
+        if (value)
+            issues = response.getBody()[value];
+        else
+            issues = response.getBody();
+        repository_with_issues.number_of_issues = issues.length;
+        repository_with_issues.issues = issues;
+        deferrer.resolve(repository_with_issues);
+    }).fail(function(response) {
+        error = {
+            status: response.getHeaders().status,
+            message: response.getBody().message
+        }
+        deferrer.reject(error);
+    });
+
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+}

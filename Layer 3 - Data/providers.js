@@ -15,6 +15,11 @@ exports.map = {
             path: "/repos/%organization%/%repository%/commits",
             value: false,
             params: ['sha', 'commit&author&name', 'commit&author&date']
+        },
+        issues: {
+            path: "/repos/%organization%/%repository%/issues?state=all",
+            value: false,
+            params:['title', 'created_at', 'state' ,'user&login']
         }
     },
 

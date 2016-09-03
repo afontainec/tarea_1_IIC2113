@@ -66,3 +66,23 @@ exports.lastCommits = function(env, options) {
 
     });
 }
+
+exports.issues = function(env, options) {
+
+    logic.getIssues(env, options, function(err, response) {
+        if (err) {
+            console.log(Printer.Error(err));
+            return err;
+        }
+
+        const params = Provider.getParams("all_repositories", env, false);
+        const issues_params = Provider.getParams("issues", env, false);
+
+        const parsed_response = Parser.parseRepositoriesWithIssues(response, params, issues_params, options);
+
+        Printer.printRepositoriesWithIssues(parsed_response, env, options);
+
+
+
+    });
+}
