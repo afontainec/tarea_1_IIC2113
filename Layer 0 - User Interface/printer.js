@@ -57,6 +57,20 @@ function printIssue(issue){
     console.log("  Create Date: "+issue.date);
     console.log("  Username: "+issue.username);
     console.log("  State: "+issue.state);
+    console.log("  Labels: ");
+    if (issue.labels.length == 0){
+        console.log("   This issue has no labels");
+    } else{
+        for (var i = 0; i < issue.labels.length; i++){
+            console.log("   Label "+i);
+            printLabel(issue.labels[i]);
+        }
+    }
+}
+
+function printLabel(label){
+    console.log("    Name: "+label.name);
+    console.log("    Color: "+label.color);
 }
 
 exports.printOneRepository = function(repository, env, options) {

@@ -77,8 +77,9 @@ exports.issues = function(env, options) {
 
         const params = Provider.getParams("all_repositories", env, false);
         const issues_params = Provider.getParams("issues", env, false);
+        const label_params = Provider.getParams("labels", env, false);
 
-        const parsed_response = Parser.parseRepositoriesWithIssues(response, params, issues_params, options);
+        const parsed_response = Parser.parseRepositoriesWithIssues(response, params, issues_params, label_params, options);
 
         Printer.printRepositoriesWithIssues(parsed_response, env, options);
 

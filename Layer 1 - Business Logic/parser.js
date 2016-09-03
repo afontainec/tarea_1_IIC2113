@@ -77,31 +77,48 @@ function parseRepositoryWithCommit(input_json, params, commit_params, options) {
     return output_json;
 }
 
-exports.parseRepositoriesWithIssues = function(input_array, params, issues_params, options) {
+exports.parseRepositoriesWithIssues = function(input_array, params, issues_params, label_params, options) {
     let output_array = [];
 
     for (var i = 0; i < input_array.length; i++) {
-        output_array.push(parseRepositoryWithIssues(input_array[i], params, issues_params, options));
+        output_array.push(parseRepositoryWithIssues(input_array[i], params, issues_params, label_params, options));
     }
 
     return output_array;
 }
 
-function parseRepositoryWithIssues(input_json, params, issues_params, options) {
+function parseRepositoryWithIssues(input_json, params, issues_params, label_params, options) {
     options.info = false;
     output_json = parseRepository(input_json, params, options);
     output_json.issues = [];
     for (var i = 0; i < input_json.issues.length ; i++){
-        output_json.issues.push({
-            title: getParam(input_json.issues[i], issues_params[0]),
-            date: getParam(input_json.issues[i], issues_params[1]),
-            username: getParam(input_json.issues[i], issues_params[2]),
-            state: getParam(input_json.issues[i], issues_params[3])
-
-        });
+        output_json.issues.push(parseIssue(input_json.issues[i], issues_params, label_params));
     }
 
-    console.log(output_json);
 
     return output_json;
+}
+
+function parseIssue(input_json, issues_params, label_params){
+    issue_json = {
+        title: getParam(input_json, issues_params[0]),
+        date: getParam(input_json, issues_params[1]),
+        username: getParam(input_json, issues_params[2]),
+        state: getParam(input_json, issues_params[3]),
+    };
+    issue_json.labels = [];
+    for (var i = 0; i < input_json.labels.length ; i++){
+        issue_json.labels.push(parseLabel(input_json.labels[i], label_params));
+    }
+
+    return issue_json;
+}
+
+function parseLabel(input_json, label_params){
+    label_json = {
+        name: getParam(input_json, label_params[0]),
+        color: getParam(input_json, label_params[1]),
+    };
+
+    return label_json;
 }
