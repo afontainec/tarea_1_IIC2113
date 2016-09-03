@@ -55,7 +55,7 @@ function printIssues(repository) {
 function printIssue(issue){
     console.log("  Title: "+issue.title);
     console.log("  Create Date: "+issue.date);
-    console.log("  Username: "+issue.username);
+    console.log("  Author: "+issue.author);
     console.log("  State: "+issue.state);
     console.log("  Labels: ");
     if (issue.labels.length == 0){
@@ -88,7 +88,7 @@ exports.NoRepository = function(env, options) {
 
 }
 
-exports.error = function error(error) {
+exports.error = function Error(error) {
     console.log("**************************************************************************");
     console.error("There has been an error");
     console.error(error);
@@ -110,6 +110,21 @@ exports.printRepositoriesWithCommit = function(repositories, env, options) {
 exports.printRepositoriesWithIssues = function(repositories, env, options) {
     console.log("**************************************************************************");
     console.log("Repositories with the issues of organization " + options.organization + " in provider " + env);
+    if (options.repository){
+        console.log(" In repository "+options.repository);
+    }
+    if (options.author){
+        console.log(" By "+options.author);
+    }
+    if (options.date){
+        console.log(" On "+options.date);
+    }
+    if (options.state){
+        console.log(" With state "+options.state);
+    }
+    if (options.label){
+        console.log(" With label "+options.label);
+    }
     for (var i = 0; i < repositories.length; i++) {
         console.log("---------------------------------------------");
         printRepository(repositories[i], false);

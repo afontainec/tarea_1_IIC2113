@@ -75,6 +75,11 @@ exports.issues = function(env, options) {
             return err;
         }
 
+        if (options.repository && !response){
+            Printer.NoRepository(env, options);
+            return;
+        }
+
         const params = Provider.getParams("all_repositories", env, false);
         const issues_params = Provider.getParams("issues", env, false);
         const label_params = Provider.getParams("labels", env, false);

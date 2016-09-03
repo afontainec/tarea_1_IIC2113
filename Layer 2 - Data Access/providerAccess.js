@@ -3,17 +3,17 @@
 const Provider = require('../Layer 3 - Data/providers');
 
 
-exports.getUrl = function(attribute, provider, options) {
+exports.getUrl = function(attribute, provider, organization, repository) {
     let URL = Provider.map[provider].host;
-    let path = replacements(Provider.map[provider][attribute].path, options);
+    let path = replacements(Provider.map[provider][attribute].path, organization, repository);
     return URL + path;
 }
 
 
-function replacements(str, options) {
+function replacements(str, organization, repository) {
     var replacements = {
-        "%organization%": options.organization,
-        "%repository%": options.repository
+        "%organization%": organization,
+        "%repository%": repository
     };
     str = str.replace(/%\w+%/g, function(all) {
         return replacements[all] || all;

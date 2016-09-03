@@ -48,6 +48,11 @@ program
     .alias('iss')
     .description('obtain and filter the issues of an organization')
     .option('-o, --organization [organization]', 'organization to which get repositories')
+    .option('-r, --repository [repository]', 'filter by this repository')
+    .option('-a, --author [author]', 'author of the issue')
+    .option('-d, --date [date]' , 'date of the issue')
+    .option('-s, --state [state]' , 'state of the issue')
+    .option('-l, --label [label]' , 'label of the issue')
     .action(function(env, options) {
         interpreter.issues(env, options);
     });

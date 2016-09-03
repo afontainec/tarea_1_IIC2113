@@ -92,23 +92,58 @@ function parseRepositoryWithIssues(input_json, params, issues_params, label_para
     output_json = parseRepository(input_json, params, options);
     output_json.issues = [];
     for (var i = 0; i < input_json.issues.length ; i++){
-        output_json.issues.push(parseIssue(input_json.issues[i], issues_params, label_params));
+        issue_to_add = parseIssue(input_json.issues[i], issues_params, label_params, options);
+        if (issue_to_add)
+            output_json.issues.push(issue_to_add);
     }
 
 
     return output_json;
 }
 
-function parseIssue(input_json, issues_params, label_params){
+function parseIssue(input_json, issues_params, label_params, options){
+    title = getParam(input_json, issues_params[0]);
+    date = getParam(input_json, issues_params[1]);
+    author = getParam(input_json, issues_params[2]);
+    state = getParam(input_json, issues_params[3]);
+    
+    if (options.author){
+        if(options.author != author)
+            return;
+    }
+    if (options.date){
+        //compare the length of the date given
+        date_substring = date.substring(0, options.date.length);
+        if(options.date != date_substring)
+            return;
+    }
+    if (options.state){
+        if(options.state != state)
+            return;
+    }
+
     issue_json = {
-        title: getParam(input_json, issues_params[0]),
-        date: getParam(input_json, issues_params[1]),
-        username: getParam(input_json, issues_params[2]),
-        state: getParam(input_json, issues_params[3]),
+        title: title,
+        date: date,
+        author: author,
+        state: state
     };
     issue_json.labels = [];
     for (var i = 0; i < input_json.labels.length ; i++){
         issue_json.labels.push(parseLabel(input_json.labels[i], label_params));
+    }
+    if (options.label){
+        if (issue_json.labels.length == 0)
+            return;
+        ret = true
+        for (var j = 0; j< issue_json.labels.length; j++){
+            if (issue_json.labels[j].name == options.label){
+                ret = false;
+                break;
+            }
+        }
+        if (ret)
+            return;
     }
 
     return issue_json;

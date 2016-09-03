@@ -14,7 +14,7 @@ function getAllRepositories(provider, options, callback) {
     var deferrer = q.defer();
 
 
-    const URL = Provider.getUrl("all_repositories", provider, options);
+    const URL = Provider.getUrl("all_repositories", provider, options.organization, options.repository);
     requestify.get(URL, {
         auth: {
             username: username,
@@ -40,13 +40,13 @@ function getAllRepositories(provider, options, callback) {
     return deferrer.promise;
 }
 
+exports.findRepository = findOneRepository;
 
-
-exports.findRepository = function(provider, options, callback) {
+function findOneRepository(provider, options, callback) {
 
     var deferrer = q.defer();
 
-    const URL = Provider.getUrl("all_repositories", provider, options);
+    const URL = Provider.getUrl("all_repositories", provider, options.organization, options.repository);
     requestify.get(URL, {
         auth: {
             username: username,
@@ -121,7 +121,7 @@ function getLastCommitOfRepository(repository, provider, options, callback) {
     var deferrer = q.defer();
 
     options.repository = repository.name;
-    const URL = Provider.getUrl("commits", provider, options);
+    const URL = Provider.getUrl("commits", provider, options.organization, options.repository);
     requestify.get(URL, {
         auth: {
             username: username,
@@ -155,38 +155,62 @@ exports.getIssues = function(env, options, callback) {
 
     var deferrer = q.defer();
 
-    getAllRepositories(env, options, function(err, repositories) {
-
-        if (err) {
-            deferrer.reject(err);
-        }
-        let finished = 0;
-        let results = [];
-        const length_of_array = repositories.length;
-        for (var i = 0; i < repositories.length; i++) {
-            getIssuesOfRepository(repositories[i], env, options, function(err, issues) {
+    if (options.repository){
+        // get issues from the selected repository if it exists
+        findOneRepository(env, options, function(err, repository){
+            if (err) {
+                deferrer.reject(err);
+            }
+            if (!repository) {
+                deferrer.resolve(false);
+            }
+            let results = [];
+            getIssuesOfRepository(repository, env, options, function(err, issues) {
                 if (err) {
                     deferrer.reject(err);
                 }
                 results.push(issues);
-                finished += 1;
-                if (finished == length_of_array) {
-                    deferrer.resolve(results);
-                }
+                deferrer.resolve(results);
             });
-        }
+        });
+        deferrer.promise.nodeify(callback);
+        return deferrer.promise;
+    } else{
+        // get issues from all repositories
+        getAllRepositories(env, options, function(err, repositories) {
 
-    });
-    deferrer.promise.nodeify(callback);
-    return deferrer.promise;
+            if (err) {
+                deferrer.reject(err);
+            }
+            let finished = 0;
+            let results = [];
+            const length_of_array = repositories.length;
+            for (var i = 0; i < repositories.length; i++) {
+                getIssuesOfRepository(repositories[i], env, options, function(err, issues) {
+                    if (err) {
+                        deferrer.reject(err);
+                    }
+                    results.push(issues);
+                    finished += 1;
+                    if (finished == length_of_array) {
+                        deferrer.resolve(results);
+                    }
+                });
+            }
+
+        });
+        deferrer.promise.nodeify(callback);
+        return deferrer.promise;
+    }
+
 }
+
 
 function getIssuesOfRepository(repository, provider, options, callback) {
 
     var deferrer = q.defer();
 
-    options.repository = repository.name;
-    const URL = Provider.getUrl("issues", provider, options);
+    const URL = Provider.getUrl("issues", provider, options.organization, repository.name);
     requestify.get(URL, {
         auth: {
             username: username,
