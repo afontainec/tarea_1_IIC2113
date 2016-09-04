@@ -4,8 +4,13 @@ const Provider = require('../Layer 3 - Data/providers');
 
 
 exports.getUrl = function(attribute, provider, organization, repository) {
-    let URL = Provider.map[provider].host;
-    let path = replacements(Provider.map[provider][attribute].path, organization, repository);
+    provider_lower = provider.toLowerCase();
+    organization_lower = organization.toLowerCase();
+    repository_lower = false;
+    if (repository)
+      repository_lower = repository.toLowerCase();
+    let URL = Provider.map[provider_lower].host;
+    let path = replacements(Provider.map[provider_lower][attribute].path, organization_lower, repository_lower);
     return URL + path;
 }
 

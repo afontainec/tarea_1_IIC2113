@@ -153,6 +153,10 @@ function parseIssue(input_json, issues_params, label_params, options){
         state: state
     };
     issue_json.labels = [];
+    
+    if (!input_json.labels)
+        return issue_json
+
     for (var i = 0; i < input_json.labels.length ; i++){
         issue_json.labels.push(parseLabel(input_json.labels[i], label_params));
     }

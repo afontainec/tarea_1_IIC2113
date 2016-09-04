@@ -109,7 +109,7 @@ exports.NoRepository = function(env, options) {
 
 }
 
-exports.error = function Error(error) {
+exports.Error = function Error(error) {
     console.log("**************************************************************************");
     console.error("There has been an error");
     console.error(error);

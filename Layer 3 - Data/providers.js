@@ -35,13 +35,31 @@ exports.map = {
         host: 'https://api.bitbucket.org',
         all_repositories: {
             path: "/2.0/repositories/%organization%",
-            value: "values",
+            value: 'values',
             // path: '/orgs/{ORG}/repos',
-            params: ['values&name', '', 'values&is_private'],
-            extended_params: ['', '', '',
+            params: ['name', 'website', 'is_private'],
+            extended_params: ['created_on', '', '',
                 '', '', ''
             ],
         },
+        commits: {
+            path: "/2.0/repositories/%organization%/%repository%/commits",
+            value: 'values',
+            params: ['hash', 'author&user&display_name', 'date']
+        },
+        issues: {
+            path: "/2.0/repositories/%organization%/%repository%/issues?state=all",
+            value: 'values',
+            params:['title', 'created_on', 'reporter&display_name', 'state', '']
+        },
+        labels: {
+            params:['', '']
+        },
+        pulls: {
+            path: "/2.0/repositories/%organization%/%repository%/pullrequests?state=all",
+            value: 'values',
+            params:['title', 'created_on', 'author&display_name', 'state', 'destination&branch&name']
+        }
     },
 
 }
