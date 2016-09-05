@@ -151,36 +151,7 @@ function getLastCommitOfRepository(repository, provider, options, password, call
 }
 
 
-function getAllCommitsOfRepository(repository, provider, options, password, callback) {
 
-    var deferrer = q.defer();
-
-    options.repository = repository.name;
-    const URL = Provider.getUrl("commits", provider, options.organization, options.repository);
-    const JSON = getAuthJSON(options.username, password);
-    requestify.get(URL, JSON).then(function(response) {
-        // Get the response body
-        const value = Provider.getValue("commits", provider, options);
-        let repository_with_commits = repository;
-
-        let commits = [];
-        if (value)
-            commits = response.getBody()[value];
-        else
-            commits = response.getBody();
-        repository_with_commits.commits = commits;
-        deferrer.resolve(repository_with_commits);
-    }).fail(function(response) {
-        error = {
-            status: response.getHeaders().status,
-            message: response.getBody().message
-        }
-        deferrer.reject(error);
-    });
-
-    deferrer.promise.nodeify(callback);
-    return deferrer.promise;
-}
 
 
 exports.getIssues = function(env, options, password, callback) {
@@ -362,7 +333,76 @@ function getPullsOfRepository(repository, provider, options, password, callback)
 }
 
 exports.getCollaborator = function getMaxCollaborator(env, options, password, callback) {
-  console.log("collabora");
+
+    var deferrer = q.defer();
+    getAllCommitsOfRepositories(env, options, password, function selectCollaborator(err, commits) {
+        if (err) {
+            deferrer.reject(err);
+        } else {
+          console.log(commits);
+        }
+    });
+
+}
+
+function getAllCommitsOfRepositories(env, options, password, callback) {
+    var deferrer = q.defer();
+    getAllRepositories(env, options, password, function(err, repositories) {
+
+        if (err) {
+            deferrer.reject(err);
+        } else {
+            let finished = 0;
+            let results = [];
+
+            const length_of_array = repositories.length;
+            for (var i = 0; i < repositories.length; i++) {
+                getAllCommitsOfRepository(repositories[i], env, options, password, function(err, repository_with_commits) {
+                    if (err) {
+                        deferrer.reject(err);
+                    }
+                    results.push(repository_with_commits.commits);
+                    finished += 1;
+                    if (finished == length_of_array) {
+                        deferrer.resolve(results);
+                    }
+                });
+            }
+        }
+    });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
+}
+
+function getAllCommitsOfRepository(repository, provider, options, password, callback) {
+
+    var deferrer = q.defer();
+
+    options.repository = repository.name;
+    const URL = Provider.getUrl("commits", provider, options.organization, options.repository);
+    const JSON = getAuthJSON(options.username, password);
+    requestify.get(URL, JSON).then(function(response) {
+        // Get the response body
+        const value = Provider.getValue("commits", provider, options);
+        let repository_with_commits = repository;
+
+        let commits = [];
+        if (value)
+            commits = response.getBody()[value];
+        else
+            commits = response.getBody();
+        repository_with_commits.commits = commits;
+        deferrer.resolve(repository_with_commits);
+    }).fail(function(response) {
+        error = {
+            status: response.getHeaders().status,
+            message: response.getBody().message
+        }
+        deferrer.reject(error);
+    });
+
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
 }
 
 function getAuthJSON(username, password) {
