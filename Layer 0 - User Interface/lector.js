@@ -25,9 +25,8 @@ program
                 var password = yield prompt.password('password: ');
                 interpreter.allRepositories(env, options, password);
             });
-        }
-        else {
-          interpreter.allRepositories(env, options);
+        } else {
+            interpreter.allRepositories(env, options);
         }
 
     });
@@ -42,15 +41,14 @@ program
     .option('-r, --repository [repository]', 'repository to check if it exists in organization')
     .option('-u, --username [username]', 'username to authenticate, if not present it will not authenticate.')
     .action((env, options) => {
-      if(options.username) {
-        co(function *() {
-            const password = yield prompt.password('password: ');
-            interpreter.findRepository(env, options, password);
-        })
-      }
-      else {
-        interpreter.findRepository(env, options);
-      }
+        if (options.username) {
+            co(function*() {
+                const password = yield prompt.password('password: ');
+                interpreter.findRepository(env, options, password);
+            })
+        } else {
+            interpreter.findRepository(env, options);
+        }
     });
 
 //RF 5
@@ -61,15 +59,14 @@ program
     .option('-o, --organization [organization]', 'organization to which get repositories')
     .option('-u, --username [username]', 'username to authenticate, if not present it will not authenticate.')
     .action(function(env, options) {
-      if(options.username) {
-        co(function *() {
-            const password = yield prompt.password('password: ');
-            interpreter.lastCommits(env, options, password);
-        })
-      }
-      else {
-        interpreter.lastCommits(env, options);
-      }
+        if (options.username) {
+            co(function*() {
+                const password = yield prompt.password('password: ');
+                interpreter.lastCommits(env, options, password);
+            })
+        } else {
+            interpreter.lastCommits(env, options);
+        }
     });
 
 //RF 6
@@ -84,15 +81,14 @@ program
     .option('-l, --label [label]', 'label of the issue')
     .option('-u, --username [username]', 'username to authenticate, if not present it will not authenticate.')
     .action(function(env, options) {
-      if(options.username) {
-        co(function *() {
-            const password = yield prompt.password('password: ');
-            interpreter.issues(env, options, password);
-        })
-      }
-      else {
-        interpreter.issues(env, options);
-      }
+        if (options.username) {
+            co(function*() {
+                const password = yield prompt.password('password: ');
+                interpreter.issues(env, options, password);
+            })
+        } else {
+            interpreter.issues(env, options);
+        }
     });
 
 //RF 7
@@ -106,15 +102,32 @@ program
     .option('-b, --basebranch [basebranch]', 'base branch of the pull request')
     .option('-u, --username [username]', 'username to authenticate, if not present it will not authenticate.')
     .action(function(env, options) {
-      if(options.username) {
-        co(function *() {
-            const password = yield prompt.password('password: ');
-            interpreter.pulls(env, options, password);
-        })
-      }
-      else {
-        interpreter.pulls(env, options);
-      }
+        if (options.username) {
+            co(function*() {
+                const password = yield prompt.password('password: ');
+                interpreter.pulls(env, options, password);
+            })
+        } else {
+            interpreter.pulls(env, options);
+        }
+    });
+
+//RF 9
+program
+    .command('max-collaborator [env]')
+    .alias('collaborator')
+    .description('obtain and filter the pull requests of an organization')
+    .option('-o, --organization [organization]', 'organization to which get repositories')
+    .option('-u, --username [username]', 'username to authenticate, if not present it will not authenticate.')
+    .action(function(env, options) {
+        if (options.username) {
+            co(function*() {
+                const password = yield prompt.password('password: ');
+                interpreter.collaborator(env, options, password);
+            })
+        } else {
+            interpreter.collaborator(env, options);
+        }
     });
 
 

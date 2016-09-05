@@ -361,6 +361,10 @@ function getPullsOfRepository(repository, provider, options, password, callback)
     return deferrer.promise;
 }
 
+exports.getCollaborator = function getMaxCollaborator(env, options, password, callback) {
+  console.log("collabora");
+}
+
 function getAuthJSON(username, password) {
     if (username) {
         return {
