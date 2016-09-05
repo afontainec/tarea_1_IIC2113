@@ -93,10 +93,14 @@ function parseRepositoryWithIssues(input_json, params, issues_params, label_para
     options.info = false;
     output_json = parseRepository(input_json, params, options);
     output_json.issues = [];
-    for (var i = 0; i < input_json.issues.length ; i++){
-        issue_to_add = parseIssue(input_json.issues[i], issues_params, label_params, options);
-        if (issue_to_add)
-            output_json.issues.push(issue_to_add);
+    if (input_json.issues){
+
+        for (var i = 0; i < input_json.issues.length ; i++){
+            issue_to_add = parseIssue(input_json.issues[i], issues_params, label_params, options);
+            if (issue_to_add)
+                output_json.issues.push(issue_to_add);
+        }
+
     }
 
 
@@ -117,11 +121,14 @@ function parseRepositoryWithPulls(input_json, params, pulls_params, options) {
     options.info = false;
     output_json = parseRepository(input_json, params, options);
     output_json.pulls = [];
-    for (var i = 0; i < input_json.pulls.length ; i++){
-        pulls_to_add = parsePull(input_json.pulls[i], pulls_params, options);
-        if (pulls_to_add)
-            output_json.pulls.push(pulls_to_add);
+    if (input_json.pulls){
+        for (var i = 0; i < input_json.pulls.length ; i++){
+            pulls_to_add = parsePull(input_json.pulls[i], pulls_params, options);
+            if (pulls_to_add)
+                output_json.pulls.push(pulls_to_add);
+        }
     }
+    
 
 
     return output_json;

@@ -171,7 +171,9 @@ exports.getIssues = function(env, options, password, callback) {
                 let results = [];
                 getIssuesOfRepository(repository, env, options, password, function(err, issues) {
                     if (err) {
-                        deferrer.reject(err);
+                        empty_issues = [];
+                        results.push(empty_issues);
+                        deferrer.resolve(results);
                     } else {
                         results.push(issues);
                         deferrer.resolve(results);
@@ -194,7 +196,12 @@ exports.getIssues = function(env, options, password, callback) {
                 for (var i = 0; i < repositories.length; i++) {
                     getIssuesOfRepository(repositories[i], env, options, password, function(err, issues) {
                         if (err) {
-                            deferrer.reject(err);
+                            empty_issues = [];
+                            results.push(empty_issues);
+                            finished += 1;
+                            if (finished == length_of_array) {
+                                deferrer.resolve(results);
+                            }
                         } else {
                             results.push(issues);
                             finished += 1;
@@ -230,6 +237,7 @@ function getIssuesOfRepository(repository, provider, options, password, callback
             issues = response.getBody()[value];
         else
             issues = response.getBody();
+
         repository_with_issues.number_of_issues = issues.length;
         repository_with_issues.issues = issues;
         deferrer.resolve(repository_with_issues);
@@ -261,7 +269,9 @@ exports.getPulls = function(env, options, password, callback) {
                 let results = [];
                 getPullsOfRepository(repository, env, options, password, function(err, pulls) {
                     if (err) {
-                        deferrer.reject(err);
+                        empty_pulls = [];
+                        results.push(empty_pulls);
+                        deferrer.resolve(results);
                     } else {
                         results.push(pulls);
                         deferrer.resolve(results);
