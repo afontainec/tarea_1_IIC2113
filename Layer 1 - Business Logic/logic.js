@@ -366,9 +366,10 @@ exports.getCollaborator = function getMaxCollaborator(env, options, password, ca
                     max_collaborator.count = collaborators[username].count;
                     max_collaborator.name = name;
                     max_collaborator.mail = mail;
+                    max_collaborator.username = username;
                 }
             }
-              deferrer.promise(max_collaborator);
+              deferrer.resolve(max_collaborator);
         }
     });
     deferrer.promise.nodeify(callback);

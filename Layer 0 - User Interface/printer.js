@@ -44,57 +44,57 @@ function printCommit(repository) {
 
 function printIssues(repository) {
     console.log("Issues:");
-    if (repository.issues.length == 0){
+    if (repository.issues.length == 0) {
         console.log(" No issues in this repository");
     } else {
-        for (var i = 0 ; i < repository.issues.length; i++){
-            console.log(" Issue "+i);
+        for (var i = 0; i < repository.issues.length; i++) {
+            console.log(" Issue " + i);
             printIssue(repository.issues[i]);
         }
     }
 
 }
 
-function printIssue(issue){
-    console.log("  Title: "+issue.title);
-    console.log("  Created Date: "+issue.date);
-    console.log("  Author: "+issue.author);
-    console.log("  State: "+issue.state);
+function printIssue(issue) {
+    console.log("  Title: " + issue.title);
+    console.log("  Created Date: " + issue.date);
+    console.log("  Author: " + issue.author);
+    console.log("  State: " + issue.state);
     console.log("  Labels: ");
-    if (issue.labels.length == 0){
+    if (issue.labels.length == 0) {
         console.log("   This issue has no labels");
-    } else{
-        for (var i = 0; i < issue.labels.length; i++){
-            console.log("   Label "+i);
+    } else {
+        for (var i = 0; i < issue.labels.length; i++) {
+            console.log("   Label " + i);
             printLabel(issue.labels[i]);
         }
     }
 }
 
-function printLabel(label){
-    console.log("    Name: "+label.name);
-    console.log("    Color: "+label.color);
+function printLabel(label) {
+    console.log("    Name: " + label.name);
+    console.log("    Color: " + label.color);
 }
 
 function printPulls(repository) {
     console.log("Pull Requests:");
-    if (repository.pulls.length == 0){
+    if (repository.pulls.length == 0) {
         console.log(" No pull requests in this repository");
     } else {
-        for (var i = 0 ; i < repository.pulls.length; i++){
-            console.log(" Pull Request "+i);
+        for (var i = 0; i < repository.pulls.length; i++) {
+            console.log(" Pull Request " + i);
             printPull(repository.pulls[i]);
         }
     }
 
 }
 
-function printPull(pull){
-    console.log("  Title: "+pull.title);
-    console.log("  Created Date: "+pull.date);
-    console.log("  User: "+pull.user);
-    console.log("  State: "+pull.state);
-    console.log("  Base Branch: "+pull.basebranch);
+function printPull(pull) {
+    console.log("  Title: " + pull.title);
+    console.log("  Created Date: " + pull.date);
+    console.log("  User: " + pull.user);
+    console.log("  State: " + pull.state);
+    console.log("  Base Branch: " + pull.basebranch);
 }
 
 exports.printOneRepository = function(repository, env, options) {
@@ -134,20 +134,20 @@ exports.printRepositoriesWithCommit = function(repositories, env, options) {
 exports.printRepositoriesWithIssues = function(repositories, env, options) {
     console.log("**************************************************************************");
     console.log("Repositories with the issues of organization " + options.organization + " in provider " + env);
-    if (options.repository){
-        console.log(" In repository "+options.repository);
+    if (options.repository) {
+        console.log(" In repository " + options.repository);
     }
-    if (options.author){
-        console.log(" By "+options.author);
+    if (options.author) {
+        console.log(" By " + options.author);
     }
-    if (options.date){
-        console.log(" On "+options.date);
+    if (options.date) {
+        console.log(" On " + options.date);
     }
-    if (options.state){
-        console.log(" With state "+options.state);
+    if (options.state) {
+        console.log(" With state " + options.state);
     }
-    if (options.label){
-        console.log(" With label "+options.label);
+    if (options.label) {
+        console.log(" With label " + options.label);
     }
     for (var i = 0; i < repositories.length; i++) {
         console.log("---------------------------------------------");
@@ -161,17 +161,17 @@ exports.printRepositoriesWithIssues = function(repositories, env, options) {
 exports.printRepositoriesWithPulls = function(repositories, env, options) {
     console.log("**************************************************************************");
     console.log("Repositories with the pulls of organization " + options.organization + " in provider " + env);
-    if (options.repository){
-        console.log(" In repository "+options.repository);
+    if (options.repository) {
+        console.log(" In repository " + options.repository);
     }
-    if (options.author){
-        console.log(" By "+options.author);
+    if (options.author) {
+        console.log(" By " + options.author);
     }
-    if (options.state){
-        console.log(" With state "+options.state);
+    if (options.state) {
+        console.log(" With state " + options.state);
     }
-    if (options.basebranch){
-        console.log(" In base branch "+options.basebranch);
+    if (options.basebranch) {
+        console.log(" In base branch " + options.basebranch);
     }
     for (var i = 0; i < repositories.length; i++) {
         console.log("---------------------------------------------");
@@ -179,5 +179,15 @@ exports.printRepositoriesWithPulls = function(repositories, env, options) {
         printPulls(repositories[i]);
         console.log("---------------------------------------------");
     }
+    console.log("**************************************************************************");
+}
+
+exports.printMaxCollaborator = function(env, options, collaborator) {
+    console.log("**************************************************************************");
+    console.log("The collaborator with more commits of the organization " + options.organization + " is: ");
+    console.log(" name: " + collaborator.name);
+    console.log(" email: " + collaborator.mail);
+    console.log(" username: " + collaborator.username);
+    console.log(" Number of commits: " + collaborator.count);
     console.log("**************************************************************************");
 }
