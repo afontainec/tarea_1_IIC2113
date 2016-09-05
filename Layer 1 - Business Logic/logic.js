@@ -4,25 +4,32 @@ const requestify = require('requestify');
 const q = require('q');
 const Provider = require('../Layer 2 - Data Access/providerAccess');
 
-const username = 'meneh-tienda';
-const password = 'MenehHunter8';
+const path = require('path');
+//add User only if exists
+let User;
+try {
+    User = require('../Layer 3 - Data/user')
+} catch (e) {}
+
+
+
+
 
 exports.getRepositories = getAllRepositories;
 
-function getAllRepositories(provider, options, callback) {
+function getAllRepositories(provider, options, password, callback) {
 
     var deferrer = q.defer();
 
 
     const URL = Provider.getUrl("all_repositories", provider, options.organization, options.repository);
-    requestify.get(URL, {
-        auth: {
-            username: username,
-            password: password
-        }
-    }).then(function(response) {
+
+    const JSON = getAuthJSON(options.username, password);
+
+    requestify.get(URL, JSON).then(function(response) {
         // Get the response body
         const value = Provider.getValue("all_repositories", provider, options);
+
         if (value)
             deferrer.resolve(response.getBody()[value]);
         else
@@ -42,17 +49,13 @@ function getAllRepositories(provider, options, callback) {
 
 exports.findRepository = findOneRepository;
 
-function findOneRepository(provider, options, callback) {
+function findOneRepository(provider, options, password, callback) {
 
     var deferrer = q.defer();
 
     const URL = Provider.getUrl("all_repositories", provider, options.organization, options.repository);
-    requestify.get(URL, {
-        auth: {
-            username: username,
-            password: password
-        }
-    }).then(function(response) {
+    const JSON = getAuthJSON(options.username, password);
+    requestify.get(URL, JSON).then(function(response) {
         // Get the response body
         const value = Provider.getValue("all_repositories", provider, options);
         let repositories = [];
@@ -81,11 +84,10 @@ function findOneRepository(provider, options, callback) {
 }
 
 
-exports.getLastCommits = function(env, options, callback) {
-
+exports.getLastCommits = function(env, options, password, callback) {
     var deferrer = q.defer();
 
-    getAllRepositories(env, options, function(err, repositories) {
+    getAllRepositories(env, options, password, function(err, repositories) {
 
         if (err) {
             deferrer.reject(err);
@@ -94,7 +96,7 @@ exports.getLastCommits = function(env, options, callback) {
         let results = [];
         const length_of_array = repositories.length;
         for (var i = 0; i < repositories.length; i++) {
-            getLastCommitOfRepository(repositories[i], env, options, function(err, last_commit) {
+            getLastCommitOfRepository(repositories[i], env, options, password, function(err, last_commit) {
                 if (err) {
                     deferrer.reject(err);
                 }
@@ -116,18 +118,14 @@ exports.getLastCommits = function(env, options, callback) {
 
 
 
-function getLastCommitOfRepository(repository, provider, options, callback) {
+function getLastCommitOfRepository(repository, provider, options, password, callback) {
 
     var deferrer = q.defer();
 
     options.repository = repository.name;
     const URL = Provider.getUrl("commits", provider, options.organization, options.repository);
-    requestify.get(URL, {
-        auth: {
-            username: username,
-            password: password
-        }
-    }).then(function(response) {
+    const JSON = getAuthJSON(options.username, password);
+    requestify.get(URL, JSON).then(function(response) {
         // Get the response body
         const value = Provider.getValue("commits", provider, options);
         let repository_with_last_commit = repository;
@@ -151,13 +149,13 @@ function getLastCommitOfRepository(repository, provider, options, callback) {
     return deferrer.promise;
 }
 
-exports.getIssues = function(env, options, callback) {
+exports.getIssues = function(env, options, password, callback) {
 
     var deferrer = q.defer();
 
-    if (options.repository){
+    if (options.repository) {
         // get issues from the selected repository if it exists
-        findOneRepository(env, options, function(err, repository){
+        findOneRepository(env, options, password, function(err, repository) {
             if (err) {
                 deferrer.reject(err);
             }
@@ -165,7 +163,7 @@ exports.getIssues = function(env, options, callback) {
                 deferrer.resolve(false);
             }
             let results = [];
-            getIssuesOfRepository(repository, env, options, function(err, issues) {
+            getIssuesOfRepository(repository, env, options, password, function(err, issues) {
                 if (err) {
                     deferrer.reject(err);
                 }
@@ -175,9 +173,9 @@ exports.getIssues = function(env, options, callback) {
         });
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
-    } else{
+    } else {
         // get issues from all repositories
-        getAllRepositories(env, options, function(err, repositories) {
+        getAllRepositories(env, options, password, function(err, repositories) {
 
             if (err) {
                 deferrer.reject(err);
@@ -186,7 +184,7 @@ exports.getIssues = function(env, options, callback) {
             let results = [];
             const length_of_array = repositories.length;
             for (var i = 0; i < repositories.length; i++) {
-                getIssuesOfRepository(repositories[i], env, options, function(err, issues) {
+                getIssuesOfRepository(repositories[i], env, options, password, function(err, issues) {
                     if (err) {
                         deferrer.reject(err);
                     }
@@ -206,17 +204,13 @@ exports.getIssues = function(env, options, callback) {
 }
 
 
-function getIssuesOfRepository(repository, provider, options, callback) {
+function getIssuesOfRepository(repository, provider, options, password, callback) {
 
     var deferrer = q.defer();
 
     const URL = Provider.getUrl("issues", provider, options.organization, repository.name);
-    requestify.get(URL, {
-        auth: {
-            username: username,
-            password: password
-        }
-    }).then(function(response) {
+    const JSON = getAuthJSON(options.username, password);
+    requestify.get(URL, JSON).then(function(response) {
         // Get the response body
         const value = Provider.getValue("issues", provider, options);
         let repository_with_issues = repository;
@@ -241,13 +235,13 @@ function getIssuesOfRepository(repository, provider, options, callback) {
     return deferrer.promise;
 }
 
-exports.getPulls = function(env, options, callback) {
+exports.getPulls = function(env, options, password, callback) {
 
     var deferrer = q.defer();
 
-    if (options.repository){
+    if (options.repository) {
         // get pulls from the selected repository if it exists
-        findOneRepository(env, options, function(err, repository){
+        findOneRepository(env, options, password, function(err, repository) {
             if (err) {
                 deferrer.reject(err);
             }
@@ -255,7 +249,7 @@ exports.getPulls = function(env, options, callback) {
                 deferrer.resolve(false);
             }
             let results = [];
-            getPullsOfRepository(repository, env, options, function(err, pulls) {
+            getPullsOfRepository(repository, env, options, password, function(err, pulls) {
                 if (err) {
                     deferrer.reject(err);
                 }
@@ -265,9 +259,9 @@ exports.getPulls = function(env, options, callback) {
         });
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
-    } else{
+    } else {
         // get pulls from all repositories
-        getAllRepositories(env, options, function(err, repositories) {
+        getAllRepositories(env, options, password, function(err, repositories) {
 
             if (err) {
                 deferrer.reject(err);
@@ -276,7 +270,7 @@ exports.getPulls = function(env, options, callback) {
             let results = [];
             const length_of_array = repositories.length;
             for (var i = 0; i < repositories.length; i++) {
-                getPullsOfRepository(repositories[i], env, options, function(err, pulls) {
+                getPullsOfRepository(repositories[i], env, options, password, function(err, pulls) {
                     if (err) {
                         deferrer.reject(err);
                     }
@@ -295,17 +289,13 @@ exports.getPulls = function(env, options, callback) {
 
 }
 
-function getPullsOfRepository(repository, provider, options, callback) {
+function getPullsOfRepository(repository, provider, options, password, callback) {
 
     var deferrer = q.defer();
 
     const URL = Provider.getUrl("pulls", provider, options.organization, repository.name);
-    requestify.get(URL, {
-        auth: {
-            username: username,
-            password: password
-        }
-    }).then(function(response) {
+    const JSON = getAuthJSON(options.username, password);
+    requestify.get(URL, JSON).then(function(response) {
         // Get the response body
         const value = Provider.getValue("pulls", provider, options);
         let repository_with_pulls = repository;
@@ -328,4 +318,16 @@ function getPullsOfRepository(repository, provider, options, callback) {
 
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
+}
+
+function getAuthJSON(username, password) {
+    if (username) {
+        return {
+            auth: {
+                username: username,
+                password: password
+            }
+        };
+    }
+    return {};
 }

@@ -7,12 +7,12 @@ const Printer = require('../Layer 0 - User Interface/printer');
 
 
 
-exports.allRepositories = function getAllRepositories(env, options) {
+exports.allRepositories = function getAllRepositories(env, options, password) {
 
-    logic.getRepositories(env, options, function(err, response) {
+    logic.getRepositories(env, options, password, function(err, response) {
         if (err) {
             // FIXME: PRINT ERROR
-            console.log(err);
+            Printer.Error(err);
             return err;
         }
 
@@ -25,9 +25,9 @@ exports.allRepositories = function getAllRepositories(env, options) {
     });
 };
 
-exports.findRepository = function getAllRepositories(env, options) {
+exports.findRepository = function getAllRepositories(env, options, password) {
 
-    logic.findRepository(env, options, function(err, response) {
+    logic.findRepository(env, options, password, function(err, response) {
         if (err) {
             Printer.Error(err);
             return err;
@@ -47,11 +47,10 @@ exports.findRepository = function getAllRepositories(env, options) {
     });
 };
 
-exports.lastCommits = function(env, options) {
-
-    logic.getLastCommits(env, options, function(err, response) {
+exports.lastCommits = function(env, options, password) {
+    logic.getLastCommits(env, options, password, function(err, response) {
         if (err) {
-            console.log(Printer.Error(err));
+            Printer.Error(err));
             return err;
         }
 
@@ -67,11 +66,11 @@ exports.lastCommits = function(env, options) {
     });
 }
 
-exports.issues = function(env, options) {
+exports.issues = function(env, options, password) {
 
-    logic.getIssues(env, options, function(err, response) {
+    logic.getIssues(env, options, password, function(err, response) {
         if (err) {
-            console.log(Printer.Error(err));
+            Printer.Error(err));
             return err;
         }
 
@@ -93,11 +92,11 @@ exports.issues = function(env, options) {
     });
 }
 
-exports.pulls = function(env, options) {
+exports.pulls = function(env, options, password) {
 
-    logic.getPulls(env, options, function(err, response) {
+    logic.getPulls(env, options, password, function(err, response) {
         if (err) {
-            console.log(Printer.Error(err));
+            Printer.Error(err);
             return err;
         }
 
