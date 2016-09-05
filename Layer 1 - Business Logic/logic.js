@@ -25,13 +25,13 @@ function getAllRepositories(provider, options, password, callback) {
     const URL = Provider.getUrl("all_repositories", provider, options.organization, options.repository);
 
     const JSON = getAuthJSON(options.username, password);
-    console.log("-------------------------------");
-    console.log(URL + " URL");
+
     requestify.get(URL, JSON).then(function(response) {
         // Get the response body
         const value = Provider.getValue("all_repositories", provider, options);
 
         console.log(response.getBody());
+
         if (value)
             deferrer.resolve(response.getBody()[value]);
         else
@@ -96,7 +96,7 @@ exports.getLastCommits = function(env, options, password, callback) {
         }
         let finished = 0;
         let results = [];
-        console.log(repositories);
+
         const length_of_array = repositories.length;
         for (var i = 0; i < repositories.length; i++) {
             getLastCommitOfRepository(repositories[i], env, options, password, function(err, last_commit) {
@@ -152,6 +152,7 @@ function getLastCommitOfRepository(repository, provider, options, password, call
     return deferrer.promise;
 }
 
+
 function getAllCommitsOfRepository(repository, provider, options, password, callback) {
 
     var deferrer = q.defer();
@@ -182,6 +183,7 @@ function getAllCommitsOfRepository(repository, provider, options, password, call
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
 }
+
 
 exports.getIssues = function(env, options, password, callback) {
 

@@ -71,6 +71,7 @@ exports.issues = function(env, options, password) {
     logic.getIssues(env, options, password, function(err, response) {
         if (err) {
             Printer.Error(err);
+
             return err;
         }
 

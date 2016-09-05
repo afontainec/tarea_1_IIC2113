@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {},
   "bin": {
-    "saffie": "./index.js"
+    "saffie": "./Layer 0 - User Interface/lector.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
     "commander": "^2.9.0",
+    "q": "^1.4.1",
     "requestify": "^0.2.3"
   },
   "devDependencies": {
