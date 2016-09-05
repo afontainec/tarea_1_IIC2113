@@ -29,6 +29,8 @@ function parseRepository(input_json, params, options) {
 
 
 
+exports.getParamFromJson = getParam;
+
 function getParam(json, param_path) {
 
     const keys = param_path.split('&');
@@ -130,7 +132,7 @@ function parseIssue(input_json, issues_params, label_params, options){
     date = getParam(input_json, issues_params[1]);
     author = getParam(input_json, issues_params[2]);
     state = getParam(input_json, issues_params[3]);
-    
+
     if (options.author){
         if(options.author != author)
             return;
@@ -153,7 +155,7 @@ function parseIssue(input_json, issues_params, label_params, options){
         state: state
     };
     issue_json.labels = [];
-    
+
     if (!input_json.labels)
         return issue_json
 
@@ -192,7 +194,7 @@ function parsePull(input_json, pulls_params, options){
     user = getParam(input_json, pulls_params[2]);
     state = getParam(input_json, pulls_params[3]);
     basebranch = getParam(input_json, pulls_params[4]);
-    
+
     if (options.author){
         if(options.author != author)
             return;

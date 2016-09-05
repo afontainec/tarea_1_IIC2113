@@ -4,6 +4,7 @@ const requestify = require('requestify');
 const q = require('q');
 const Provider = require('../Layer 2 - Data Access/providerAccess');
 
+const Parser = require('./parser');
 const path = require('path');
 //add User only if exists
 let User;
@@ -333,15 +334,45 @@ function getPullsOfRepository(repository, provider, options, password, callback)
 }
 
 exports.getCollaborator = function getMaxCollaborator(env, options, password, callback) {
-
     var deferrer = q.defer();
     getAllCommitsOfRepositories(env, options, password, function selectCollaborator(err, commits) {
+
         if (err) {
             deferrer.reject(err);
+
         } else {
-          console.log(commits);
+
+            const collaborator_params = Provider.getCollaboratorParams(env, false);
+            let collaborators = {};
+            let max_collaborator = {
+                count: -1
+            };
+            for (var i = 0; i < commits.length; i++) {
+                const username = Parser.getParamFromJson(commits[i], collaborator_params[2]);
+                const name = Parser.getParamFromJson(commits[i], collaborator_params[0]);
+                const mail = Parser.getParamFromJson(commits[i], collaborator_params[1]);
+                //Check if username has been added already
+                if (!collaborators[username]) {
+                    collaborators[username] = {
+                        count: 0
+                    };
+                }
+                collaborators[username].count = collaborators[username].count + 1;
+                collaborators[username].name = name;
+                collaborators[username].mail = mail;
+
+                //check if it is the max collaborator
+                if (max_collaborator.count < collaborators[username].count) {
+                    max_collaborator.count = collaborators[username].count;
+                    max_collaborator.name = name;
+                    max_collaborator.mail = mail;
+                }
+            }
+              deferrer.promise(max_collaborator);
         }
     });
+    deferrer.promise.nodeify(callback);
+    return deferrer.promise;
 
 }
 
@@ -360,11 +391,12 @@ function getAllCommitsOfRepositories(env, options, password, callback) {
                 getAllCommitsOfRepository(repositories[i], env, options, password, function(err, repository_with_commits) {
                     if (err) {
                         deferrer.reject(err);
-                    }
-                    results.push(repository_with_commits.commits);
-                    finished += 1;
-                    if (finished == length_of_array) {
-                        deferrer.resolve(results);
+                    } else {
+                        results = results.concat(repository_with_commits.commits);
+                        finished += 1;
+                        if (finished == length_of_array) {
+                            deferrer.resolve(results);
+                        }
                     }
                 });
             }

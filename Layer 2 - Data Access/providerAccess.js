@@ -34,6 +34,11 @@ exports.getParams = function (attribute, provider, extended){
   return params;
 }
 
+exports.getCollaboratorParams = function (provider, extended){
+  params = Provider.map[provider]["commits"].collaborator_params;
+  return params;
+}
+
 
 exports.getValue = function (attribute, provider, extended){
   return Provider.map[provider][attribute].value;

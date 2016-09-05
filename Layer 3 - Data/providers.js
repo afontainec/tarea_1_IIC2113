@@ -15,7 +15,7 @@ exports.map = {
             path: "/repos/%organization%/%repository%/commits",
             value: false,
             params: ['sha', 'commit&author&name', 'commit&author&date'],
-            collaborator_params: ['commit&author&name', 'commit&author&email', 'author&login']
+            collaborator_params: ['commit&author&name', 'commit&author&email', 'commit&author&email']
         },
         issues: {
             path: "/repos/%organization%/%repository%/issues?state=all",
@@ -47,7 +47,7 @@ exports.map = {
             path: "/2.0/repositories/%organization%/%repository%/commits",
             value: 'values',
             params: ['hash', 'author&user&display_name', 'date'],
-            collaborator_params: ['author&user&display_name', 'author&user&email', 'author&user&username']
+            collaborator_params: ['author&user&display_name', 'author&raw', 'author&user&username']
 
         },
         issues: {

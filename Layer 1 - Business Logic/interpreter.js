@@ -124,18 +124,8 @@ exports.collaborator = function(env, options, password) {
           Printer.Error(err);
           return err;
       }
-      console.log(response);
-      // if (options.repository && !response){
-      //     Printer.NoRepository(env, options);
-      //     return;
-      // }
-      //
-      // const params = Provider.getParams("all_repositories", env, false);
-      // const pulls_params = Provider.getParams("pulls", env, false);
-      //
-      // const parsed_response = Parser.parseRepositoriesWithPulls(response, params, pulls_params, options);
-      //
-      // Printer.printRepositoriesWithPulls(parsed_response, env, options);
+
+      Printer.printMaxCollaborator(env, options, response);
 
 
 
