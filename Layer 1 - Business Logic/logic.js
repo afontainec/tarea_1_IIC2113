@@ -30,8 +30,7 @@ function getAllRepositories(provider, options, password, callback) {
         // Get the response body
         const value = Provider.getValue("all_repositories", provider, options);
 
-        console.log(response.getBody());
-
+        let repositories = undefined;
         if (value)
             deferrer.resolve(response.getBody()[value]);
         else
@@ -41,7 +40,6 @@ function getAllRepositories(provider, options, password, callback) {
             status: response.getHeaders().status,
             message: response.getBody().message
         }
-
         deferrer.reject(error);
     });
 
@@ -93,24 +91,24 @@ exports.getLastCommits = function(env, options, password, callback) {
 
         if (err) {
             deferrer.reject(err);
-        }
-        let finished = 0;
-        let results = [];
+        } else {
+            let finished = 0;
+            let results = [];
 
-        const length_of_array = repositories.length;
-        for (var i = 0; i < repositories.length; i++) {
-            getLastCommitOfRepository(repositories[i], env, options, password, function(err, last_commit) {
-                if (err) {
-                    deferrer.reject(err);
-                }
-                results.push(last_commit);
-                finished += 1;
-                if (finished == length_of_array) {
-                    deferrer.resolve(results);
-                }
-            });
+            const length_of_array = repositories.length;
+            for (var i = 0; i < repositories.length; i++) {
+                getLastCommitOfRepository(repositories[i], env, options, password, function(err, last_commit) {
+                    if (err) {
+                        deferrer.reject(err);
+                    }
+                    results.push(last_commit);
+                    finished += 1;
+                    if (finished == length_of_array) {
+                        deferrer.resolve(results);
+                    }
+                });
+            }
         }
-
     });
     deferrer.promise.nodeify(callback);
     return deferrer.promise;
@@ -194,18 +192,20 @@ exports.getIssues = function(env, options, password, callback) {
         findOneRepository(env, options, password, function(err, repository) {
             if (err) {
                 deferrer.reject(err);
-            }
-            if (!repository) {
-                deferrer.resolve(false);
-            }
-            let results = [];
-            getIssuesOfRepository(repository, env, options, password, function(err, issues) {
-                if (err) {
-                    deferrer.reject(err);
+            } else {
+                if (!repository) {
+                    deferrer.resolve(false);
                 }
-                results.push(issues);
-                deferrer.resolve(results);
-            });
+                let results = [];
+                getIssuesOfRepository(repository, env, options, password, function(err, issues) {
+                    if (err) {
+                        deferrer.reject(err);
+                    } else {
+                        results.push(issues);
+                        deferrer.resolve(results);
+                    }
+                });
+            }
         });
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
@@ -215,23 +215,25 @@ exports.getIssues = function(env, options, password, callback) {
 
             if (err) {
                 deferrer.reject(err);
-            }
-            let finished = 0;
-            let results = [];
-            const length_of_array = repositories.length;
-            for (var i = 0; i < repositories.length; i++) {
-                getIssuesOfRepository(repositories[i], env, options, password, function(err, issues) {
-                    if (err) {
-                        deferrer.reject(err);
-                    }
-                    results.push(issues);
-                    finished += 1;
-                    if (finished == length_of_array) {
-                        deferrer.resolve(results);
-                    }
-                });
-            }
+            } else {
+                let finished = 0;
+                let results = [];
+                const length_of_array = repositories.length;
+                for (var i = 0; i < repositories.length; i++) {
+                    getIssuesOfRepository(repositories[i], env, options, password, function(err, issues) {
+                        if (err) {
+                            deferrer.reject(err);
+                        } else {
+                            results.push(issues);
+                            finished += 1;
+                            if (finished == length_of_array) {
+                                deferrer.resolve(results);
+                            }
+                        }
+                    });
+                }
 
+            }
         });
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
@@ -280,18 +282,20 @@ exports.getPulls = function(env, options, password, callback) {
         findOneRepository(env, options, password, function(err, repository) {
             if (err) {
                 deferrer.reject(err);
-            }
-            if (!repository) {
-                deferrer.resolve(false);
-            }
-            let results = [];
-            getPullsOfRepository(repository, env, options, password, function(err, pulls) {
-                if (err) {
-                    deferrer.reject(err);
+            } else {
+                if (!repository) {
+                    deferrer.resolve(false);
                 }
-                results.push(pulls);
-                deferrer.resolve(results);
-            });
+                let results = [];
+                getPullsOfRepository(repository, env, options, password, function(err, pulls) {
+                    if (err) {
+                        deferrer.reject(err);
+                    } else {
+                        results.push(pulls);
+                        deferrer.resolve(results);
+                    }
+                });
+            }
         });
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
@@ -301,23 +305,24 @@ exports.getPulls = function(env, options, password, callback) {
 
             if (err) {
                 deferrer.reject(err);
+            } else {
+                let finished = 0;
+                let results = [];
+                const length_of_array = repositories.length;
+                for (var i = 0; i < repositories.length; i++) {
+                    getPullsOfRepository(repositories[i], env, options, password, function(err, pulls) {
+                        if (err) {
+                            deferrer.reject(err);
+                        } else {
+                            results.push(pulls);
+                            finished += 1;
+                            if (finished == length_of_array) {
+                                deferrer.resolve(results);
+                            }
+                        }
+                    });
+                }
             }
-            let finished = 0;
-            let results = [];
-            const length_of_array = repositories.length;
-            for (var i = 0; i < repositories.length; i++) {
-                getPullsOfRepository(repositories[i], env, options, password, function(err, pulls) {
-                    if (err) {
-                        deferrer.reject(err);
-                    }
-                    results.push(pulls);
-                    finished += 1;
-                    if (finished == length_of_array) {
-                        deferrer.resolve(results);
-                    }
-                });
-            }
-
         });
         deferrer.promise.nodeify(callback);
         return deferrer.promise;
