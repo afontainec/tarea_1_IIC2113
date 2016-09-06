@@ -25,20 +25,30 @@ function printRepository(repository, extended, showCommit) {
     if (extended) {
         console.log("More info:");
         console.log(' Created: ' + repository.created_at);
-        console.log(' Clone URL: ' + repository.clone_url);
-        console.log(' Number of stargazers: ' + repository.stargazers_count);
-        console.log(' Number of watchers: ' + repository.watchers_count);
-        console.log(' Number of open issues: ' + repository.open_issues_count);
-        console.log(' Number of forks: ' + repository.forks_count);;
+        if (repository.clone_url)
+            console.log(' Clone URL: ' + repository.clone_url);
+        if (repository.stargazers_count)
+            console.log(' Number of stargazers: ' + repository.stargazers_count);
+        if (repository.watchers_count)
+            console.log(' Number of watchers: ' + repository.watchers_count);
+        if (repository.open_issues_count)
+            console.log(' Number of open issues: ' + repository.open_issues_count);
+        if (repository.forks_count)
+            console.log(' Number of forks: ' + repository.forks_count);;
     }
 
 }
 
 function printCommit(repository) {
-    console.log("Last Commit:");
-    console.log(" Name: " + repository.commit.name);
-    console.log(" Hash: " + repository.commit.sha);
-    console.log(" Date: " + repository.commit.date);
+    if (!repository.commit){
+        console.log("No last commit, or no commits available to be shown");
+    }
+    else {
+        console.log("Last Commit:");
+        console.log(" Name: " + repository.commit.name);
+        console.log(" Hash: " + repository.commit.sha);
+        console.log(" Date: " + repository.commit.date);
+    }
 
 }
 
