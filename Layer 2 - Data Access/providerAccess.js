@@ -2,7 +2,6 @@
 
 const Provider = require('../Layer 3 - Data/providers');
 
-
 exports.getUrl = function(attribute, provider, organization, repository) {
     provider_lower = provider.toLowerCase();
     organization_lower = organization.toLowerCase();
