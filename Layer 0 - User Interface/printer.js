@@ -35,10 +35,15 @@ function printRepository(repository, extended, showCommit) {
 }
 
 function printCommit(repository) {
-    console.log("Last Commit:");
-    console.log(" Name: " + repository.commit.name);
-    console.log(" Hash: " + repository.commit.sha);
-    console.log(" Date: " + repository.commit.date);
+    if (!repository.commit){
+        console.log("No last commit, or no commits available to be shown");
+    }
+    else {
+        console.log("Last Commit:");
+        console.log(" Name: " + repository.commit.name);
+        console.log(" Hash: " + repository.commit.sha);
+        console.log(" Date: " + repository.commit.date);
+    }
 
 }
 

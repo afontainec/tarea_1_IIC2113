@@ -69,11 +69,13 @@ exports.parseRepositoriesWithCommit = function(input_array, params, commit_param
 function parseRepositoryWithCommit(input_json, params, commit_params, options) {
     options.info = false;
     output_json = parseRepository(input_json, params, options);
-    output_json.commit = {
-        sha: getParam(input_json, "last_commit&" + commit_params[0]),
-        name: getParam(input_json, "last_commit&" + commit_params[1]),
-        date: getParam(input_json, "last_commit&" + commit_params[2]),
-    };
+    if (input_json.last_commit){
+        output_json.commit = {
+            sha: getParam(input_json, "last_commit&" + commit_params[0]),
+            name: getParam(input_json, "last_commit&" + commit_params[1]),
+            date: getParam(input_json, "last_commit&" + commit_params[2]),
+        };
+    }
 
 
     return output_json;

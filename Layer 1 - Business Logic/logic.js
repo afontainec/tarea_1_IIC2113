@@ -101,12 +101,14 @@ exports.getLastCommits = function(env, options, password, callback) {
                 getLastCommitOfRepository(repositories[i], env, options, password, function(err, last_commit) {
                     if (err) {
                         deferrer.reject(err);
+                    } else{
+                        results.push(last_commit);
+                        finished += 1;
+                        if (finished == length_of_array) {
+                            deferrer.resolve(results);
+                        }
                     }
-                    results.push(last_commit);
-                    finished += 1;
-                    if (finished == length_of_array) {
-                        deferrer.resolve(results);
-                    }
+                    
                 });
             }
         }
@@ -144,7 +146,7 @@ function getLastCommitOfRepository(repository, provider, options, password, call
             status: response.getHeaders().status,
             message: response.getBody().message
         }
-        deferrer.reject(error);
+        deferrer.resolve(repository);
     });
 
     deferrer.promise.nodeify(callback);
